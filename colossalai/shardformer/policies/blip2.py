@@ -21,12 +21,11 @@ class BlipPolicy(Policy):
         r"""
         Reshape the Embedding layer to make the embedding dimension divisible by world_size
         """
-        # TODO:
-        vocab_size = self.model.config.qformer_config.vocab_size
+        vocab_size = self.model.config.text_config.vocab_size
         world_size = self.shard_config.tensor_parallel_size
         if vocab_size % world_size != 0:
             new_vocab_size = vocab_size + world_size - vocab_size % world_size
-            self.model.resize_token_embeddings(new_vocab_size)
+            self.model.language_model.resize_token_embeddings(new_vocab_size)
         return self.model
 
     def module_policy(self):

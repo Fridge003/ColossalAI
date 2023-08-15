@@ -702,7 +702,6 @@ class FusedLinear1D_Col(ParallelModule):
         #                                                      process_group=process_group,
         #                                                      is_transposed=False)
         #         linear_1d.bias.data.copy_(sharded_bias.data)
-        print(linear_1d.weight.shape)
         return linear_1d
 
     def reset_parameters(self, weight_initializer, bias_initializer) -> None:
