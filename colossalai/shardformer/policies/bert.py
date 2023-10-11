@@ -40,7 +40,6 @@ class BertPolicy(Policy):
         r"""
         Reshape the Embedding layer to make the embedding dimension divisible by world_size
         """
-        # TODO:
         if self.shard_config.enable_tensor_parallelism:
             vocab_size = self.model.config.vocab_size
             world_size = self.shard_config.tensor_parallel_size
@@ -280,7 +279,7 @@ class BertPolicy(Policy):
             held_layers.append(module.embeddings)
         start_idx, end_idx = self.get_stage_index(layers_per_stage, stage_manager.stage)
         held_layers.extend(module.encoder.layer[start_idx:end_idx])
-        if stage_manager.is_last_stage():
+        if stage_manager.is_last_stage() and (module.pooler is not None):
             held_layers.append(module.pooler)
 
         return held_layers
